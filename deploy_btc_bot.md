@@ -27,17 +27,3 @@ Copy-paste seluruh prompt di bawah ini ke chat Hermes Agent. Hermes akan handle 
 5. **Report:** Berikan ringkasan job ID cron, cara cek file `btc_signals.json`, dan cara baca sinyal (LONG = beli, SHORT = jual, HOLD = tunggu)."
 
 ---
-
-## Cara Verifikasi
-Setelah Hermes selesai, lo bisa cek hasilnya dengan:
-1. **Lihat Sinyal Terakhir:** `cat btc_signals.json`
-2. **Cek Jadwal Otomatis:** `hermes cron list`
-3. **Log Eksekusi:** `hermes cron logs <job_id>`
-4. **History Harga:** `cat btc_history.json`
-
-## Apa yang Baru?
-- ✅ **LONG/SHORT** — terminologi trading real, bukan cuma BULLISH/BEARISH
-- ✅ **RSI 14** — konfirmasi tambahan biar sinyal lebih akurat
-- ✅ **Confidence Level** — Low/Medium/High berdasarkan RSI + MA alignment
-- ✅ **Format output profesional** — cocok buat ditampilkan di workshop
-- ✅ **Script wrapper** — cron lebih reliable pake shell script
