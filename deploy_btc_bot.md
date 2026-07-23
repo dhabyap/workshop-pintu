@@ -9,21 +9,61 @@ Copy-paste seluruh prompt di bawah ini ke chat Hermes Agent. Hermes akan handle 
 "Saya sedang mengikuti workshop. Tolong deploy sistem Trading Signal Bot BTC/USD secara otonom:
 
 1. **Install:** Pastikan library `requests` tersedia (`pip install requests`).
-2. **Setup Code:** Buat file `btc_signal_bot.py`. Gunakan logika ini:
+
+2. **Setup Code:** Buat file `btc_signal_bot.py` di `~/`. Gunakan logika ini:
+   - Ambil **history harga BTC 7 hari** dari CoinGecko (endpoint `/coins/bitcoin/market_chart?days=7`) biar data RSI langsung cukup.
    - Ambil harga BTC live dari CoinGecko setiap jalan.
-   - Simpan history harga ke `btc_history.json` (max 50 data).
-   - Hitung **MA 5** (sederhana) dan **RSI 14** untuk konfirmasi.
+   - Simpan history harga ke `btc_history.json` (max 100 data).
+   - Hitung **MA 5** dan **RSI 14**.
    - Logika sinyal:
-     - Jika harga > MA 5 → **LONG** (BULLISH)
-     - Jika harga < MA 5 → **SHORT** (BEARISH)
-     - Jika harga = MA 5 → **HOLD** (NETRAL)
-   - Konfirmasi RSI: RSI > 50 = bullish confirmation, RSI < 50 = bearish confirmation.
-   - Tambahkan SL (2% di bawah entry) dan TP (5% di atas entry).
-   - Output format profesional dengan timestamp, price, LONG/SHORT, RSI, MA, SL, TP, dan confidence level.
-3. **Demo Run:** Jalankan bot SEKARANG. Tampilkan output dalam format tabel/block biar audiens bisa lihat data live. Inject dummy history biar langsung dapet sinyal real (bukan HOLD).
-   - Contoh inject: `[64500, 64700, 64800, 64650, 64989]`
-   - Jalankan 2-3x biar keliatan perubahan sinyal.
-4. **Otomatisasi:** Daftarkan cron job Hermes Agent dengan nama 'BTC-Auto-Signal' untuk jalan setiap 1 jam. Pakai script wrapper `run_btc_bot.sh` yang execute `python btc_signal_bot.py` dan catat log. Prompt cron: 'Jalankan bash run_btc_bot.sh 2>&1'.
-5. **Report:** Berikan ringkasan job ID cron, cara cek file `btc_signals.json`, dan cara baca sinyal (LONG = beli, SHORT = jual, HOLD = tunggu)."
+     - Jika MA5 arah = RSI arah → **CONFIDENCE HIGH**, entry ikut arah sama.
+     - Jika MA5 ≠ RSI → **CONFIDENCE MEDIUM**, entry ikut MA5 (lebih dominan).
+     - Tidak ada HOLD — bot selalu kasih sinyal trading.
+   - RSI arah: >50 = bullish, <50 = bearish.
+   - Confidence HIGH kalau MA5 & RSI aligned, MEDIUM kalau conflict.
+   - Tambahkan SL (2%) dan TP (5%) dari entry price.
+
+3. **Demo Run:** Jalankan bot SEKARANG. Tampilkan output profesional — timestamp, price, MA5, RSI14, sinyal LONG/SHORT, confidence, SL, TP, reason. Pastikan output bersih dan siap ditampilkan di layar workshop.
+
+4. **Otomatisasi:** Daftarkan cron job Hermes Agent dengan nama 'BTC-Auto-Signal' untuk jalan setiap 1 jam. Pakai script wrapper `run_btc_bot.sh` yang execute `python btc_signal_bot.py`. Mode: no_agent=true, script=run_btc_bot.sh. Prompt tidak perlu — script langsung deliver output.
+
+5. **Report:** Berikan ringkasan:
+   - Job ID cron
+   - Cara cek sinyal: `cat ~/btc_signals.json`
+   - Cara baca sinyal: LONG = beli, SHORT = jual
+   - Penjelasan: bot tidak pernah kasih HOLD, selalu siap entry dengan confidence HIGH/MEDIUM"
 
 ---
+
+## Apa yang Baru di v2?
+
+- ✅ **Data history 7 hari dari CoinGecko** — langsung dapet sinyal tanpa dummy
+- ✅ **Tidak ada HOLD** — bot selalu kasih sinyal LONG/SHORT
+- ✅ **RSI & MA5 alignment** — HIGH confidence kalau aligned, MEDIUM kalau conflict
+- ✅ **Entry ikut MA5** — lebih dominan dari RSI kalau beda arah
+- ✅ **100 candlesticks history** — data lebih akurat
+
+## Cara Verifikasi
+
+Setelah Hermes selesai:
+
+```bash
+# Lihat sinyal terakhir
+cat ~/btc_signals.json
+
+# Cek jadwal cron
+hermes cron list
+
+# History harga
+cat ~/btc_history.json
+```
+
+## Cara Baca Sinyal
+
+| Sinyal | Arah | SL | TP |
+|--------|------|----|----|
+| LONG 🟢 | Beli | Entry - 2% | Entry + 5% |
+| SHORT 🔴 | Jual | Entry + 2% | Entry - 5% |
+
+- **Confidence HIGH** → MA5 & RSI setuju — peluang bagus
+- **Confidence MEDIUM** → MA5 & RSI beda arah — tetap gas ikut MA5, TP ketat
