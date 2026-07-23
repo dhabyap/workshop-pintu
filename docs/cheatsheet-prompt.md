@@ -1,5 +1,5 @@
-# CHEATSHEET — FROM ZERO TO TRADING BOTS
-## Workshop PINTU × Web3 Dev Bandung | 25 Juli 2026
+# CHEATSHEET — Workshop Rakit Bot Sinyal
+## PINTU × Web3 Dev Bandung | 25 Juli 2026
 
 Template bot udah siap. Tapi kalau mau modifikasi, tanya Hermes Agent pake prompt di bawah.
 Tinggal copas → ganti sesuai kebutuhan → AI akan ubah kodenya.
@@ -63,24 +63,11 @@ Gunakan ini kapan aja selama workshop:
 - "Kenapa WR 60% lebih profit daripada WR 90%?"
 
 ──────────────────────────────────────────────────
-## SETUP PROVIDER (Step Detail)
-
-**OpenRouter — Gratis**
-```
-1. Buka https://openrouter.ai/keys
-2. Login (Google/GitHub/email)
-3. Klik "Create Key" → copy API key
-4. hermes model → pilih OpenRouter → paste key → pilih DeepSeek V3
-```
-
-**Alternatif:**
-- Gemini API → https://aistudio.google.com/apikey (60 req/menit gratis)
-- Ollama local → `ollama pull llama3.2` (butuh RAM 8GB+)
-
 ## ALUR CEPAT WORKSHOP
+──────────────────────────────────────────────────
 
 1. Install Hermes Agent → `curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash`
-2. Setup provider → `hermes model` → OpenRouter → paste API key → DeepSeek V3
+2. Setup provider → `hermes setup`
 3. Download template `trading_bot_template.py`
 4. Jalanin → `python trading_bot_template.py`
 5. Cron → `hermes cron create 'every 6h' --name "Sinyal Saya" --prompt "Jalankan python trading_bot_template.py 2>&1"`
