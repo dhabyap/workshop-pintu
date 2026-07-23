@@ -153,15 +153,6 @@ if __name__ == "__main__":
 
 ---
 
-## Kenapa Pakai Script Final?
-
-| Cara Lama (prompt deskriptif) | Cara Baru (script final) |
-|---|---|
-| Tiap AI generate kode sendiri | Semua AI copy-paste script IDENTIK |
-| Output format beda-beda | Output persis sama |
-| Debug tiap AI punya bug sendiri | Udah tested, zero bug |
-| Workshop jadi chaos | Workshop mulus, tinggal run |
-
 ## Cara Verifikasi
 
 ```bash
