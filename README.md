@@ -16,5 +16,5 @@ Repository ini berisi materi lengkap yang Anda butuhkan selama workshop:
 Jika Anda sudah menginstal Hermes Agent, Anda cukup membuka file `deploy_btc_bot.md`, salin prompt-nya, dan kirimkan ke Hermes Agent.
 
 ---
-**Instructor:** Putra (Web Developer & Crypto Trader)
+**Instructor:** Dhaby (Web Developer & Crypto Trader)
 **Venue:** Parla Bandung, 25 Juli 2026
